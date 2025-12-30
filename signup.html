@@ -1,25 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Flight Signup</title>
+  <title>Flight Signup | SWA PTFS</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
+<a href="index.html" class="home-btn">← Back to Home</a>
+
 <h1>Flight Signup</h1>
 
-<form>
-  <input type="text" placeholder="Roblox Username" required>
-  <input type="text" placeholder="Flight Number" required>
-  <select>
-    <option>Pilot "(must have role)"</option>
-    <option>Co-Pilot "(must have role)"</option>
-    <option>passenger</option>
+<form id="signupForm">
+  <input type="text" id="username" placeholder="Roblox Username" required>
+  <input type="text" id="flight" placeholder="Flight Number" required>
+
+  <select id="role">
+    <option>Pilot</option>
+    <option>Co-Pilot</option>
   </select>
-  <button type="submit">Submit</button>
+
+  <button type="submit">Post Flight</button>
 </form>
 
-<p>*Signup links to Discord bot (future integration)</p>
+<p id="msg"></p>
+
+<script>
+document.getElementById("signupForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const signup = {
+    user: document.getElementById("username").value,
+    flight: document.getElementById("flight").value,
+    role: document.getElementById("role").value,
+    time: new Date().toLocaleString()
+  };
+
+  const signups = JSON.parse(localStorage.getItem("signups")) || [];
+  signups.push(signup);
+  localStorage.setItem("signups", JSON.stringify(signups));
+
+  document.getElementById("msg").innerText = "✅ Flight posted successfully!";
+  document.getElementById("signupForm").reset();
+});
+</script>
 
 </body>
 </html>
