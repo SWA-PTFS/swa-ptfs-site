@@ -63,6 +63,20 @@ Join our Discord server for:
 https://discord.gg/vFTNcVvf
 
 ---
+# SWA PTFS Operations Site
+
+Static frontend hosted on GitHub Pages  
+Backend powered by Cloudflare Workers
+
+## API
+- GET /api/flights
+- POST /api/admin/update-flight
+- POST /api/admin/delete-flight
+
+Backend:
+https://swaptfs.sfleishman.workers.dev
+
+---
 
 ## 🛠️ Planned Features
 - Discord bot flight syncing
