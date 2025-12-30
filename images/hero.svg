@@ -1,0 +1,40 @@
+<svg width="1400" height="450" viewBox="0 0 1400 450" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0b3c6d"/>
+      <stop offset="100%" stop-color="#001f3f"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="1400" height="450" fill="url(#skyGrad)"/>
+
+  <!-- Clouds -->
+  <ellipse cx="300" cy="130" rx="160" ry="40" fill="#ffffff22"/>
+  <ellipse cx="800" cy="100" rx="200" ry="55" fill="#ffffff22"/>
+
+  <!-- Aircraft -->
+  <path d="M200 270
+           C350 220, 600 210, 900 210
+           L1150 210
+           C1250 210, 1300 240, 1320 260
+           C1300 280, 1250 310, 1150 310
+           L900 310
+           C600 310, 350 300, 200 270Z"
+        fill="#003a8f"/>
+
+  <!-- Title -->
+  <text x="700" y="140" text-anchor="middle"
+        font-family="Arial Black"
+        font-size="56"
+        fill="white">
+    SOUTHWEST PTFS
+  </text>
+
+  <text x="700" y="190" text-anchor="middle"
+        font-family="Arial"
+        font-size="24"
+        fill="#ffb81c">
+    Professional Airline Operations
+  </text>
+</svg>
