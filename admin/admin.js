@@ -1,4 +1,5 @@
-const ADMIN_PASSWORD = "SWAADMINMANAGEDBYHAW.II"; 
+const ADMIN_PASSWORD = "SWAADMINHAw.II"; 
+
 function login(e) {
   e.preventDefault();
   const pass = document.getElementById("password").value;
