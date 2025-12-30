@@ -52,8 +52,8 @@ swa-ptfs-site/
 ## 🔐 Admin System
 Admins can:
 - Log in via `/admin/login.html`
-- Add, remove, and update flights
-- Control what appears on the live flight board
+- Add, remove, and update flights bot on discord will allow this through listening to the flightdeck vc
+- Control what appears on the live flight board 
 
 ⚠️ **Note:**  
 This is a frontend-only admin system designed for PTFS and GitHub Pages.  
