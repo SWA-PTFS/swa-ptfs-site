@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <title>Admin Login | SWA PTFS</title>
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
 
+<a href="../index.html" class="home-btn">← Back to Home</a>
+
 <h1>Admin Login</h1>
 
-<form onsubmit="login(event)">
-  <input type="password" id="password" placeholder="Admin Password" required>
+<form id="loginForm" onsubmit="login(event)">
+  <input type="password" id="password" placeholder="Enter Admin Password" required>
   <button type="submit">Login</button>
+  <p id="error" style="color:red; font-weight:bold;"></p>
 </form>
-
-<p id="error"></p>
 
 <script src="admin.js"></script>
 </body>
