@@ -14,7 +14,7 @@ This site provides:
 ## 🌐 Live Website
 Hosted using **GitHub Pages**
 
-https://swa-ptfs.github.io
+https://swa-ptfs.github.io/swa-ptfs-site/
 
 yaml
 Copy code
