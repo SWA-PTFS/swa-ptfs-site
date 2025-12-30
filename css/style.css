@@ -48,6 +48,22 @@ table {
   margin: auto;
   border-collapse: collapse;
 }
+.home-btn {
+  display: inline-block;
+  margin: 15px;
+  padding: 10px 18px;
+  background: #003a8f; /* SWA blue */
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.home-btn:hover {
+  background: #d71920; /* SWA red */
+}
+
 
 th, td {
   border: 1px solid #444;
