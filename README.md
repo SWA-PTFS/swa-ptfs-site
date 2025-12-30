@@ -16,44 +16,11 @@ Hosted using **GitHub Pages**
 
 https://swa-ptfs.github.io/swa-ptfs-site/
 
-yaml
-Copy code
-
----
-
-## 📁 Project Structure
-swa-ptfs-site/
-│
-├── index.html # Home page
-├── flights.html # Live flight board
-├── signup.html # Flight signup form
-│
-├── admin/
-│ ├── login.html # Admin login
-│ ├── dashboard.html # Flight control panel
-│ └── admin.js # Admin authentication
-│
-├── css/
-│ └── style.css # Global styles
-│
-├── js/
-│ └── flights.js # Public flight board logic
-│
-├── images/
-│ ├── logo.png
-│ ├── hero.jpg
-│ └── aircraft.png
-│
-└── README.md
 
 
 ---
 
-## 🔐 Admin System
-Admins can:
-- Log in via `/admin/login.html`
-- Add, remove, and update flights bot on discord will allow this through listening to the flightdeck vc
-- Control what appears on the live flight board 
+ 
 
 ⚠️ **Note:**  
 This is a frontend-only admin system designed for PTFS and GitHub Pages.  
