@@ -1,10 +1,5 @@
-const flights = [
-  { id: "SWA101", aircraft: "B737", route: "LAX → DEN", status: "Boarding" },
-  { id: "SWA205", aircraft: "A320", route: "DAL → PHX", status: "Enroute" },
-  { id: "SWA332", aircraft: "B738", route: "MCO → ATL", status: "Landed" }
-];
+const flights = JSON.parse(localStorage.getItem("flights")) || [];
 
-const table = document.getElementById("flightTable");
 
 flights.forEach(flight => {
   const row = table.insertRow();
