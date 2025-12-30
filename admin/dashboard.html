@@ -6,21 +6,24 @@
 </head>
 <body onload="checkAdmin()">
 
-<h1>Flight Control Panel</h1>
+<a href="../index.html" class="home-btn">← Back to Home</a>
 <button onclick="logout()">Logout</button>
 
+<h1>Flight Control Panel</h1>
+
 <h2>Add Flight</h2>
-<form onsubmit="addFlight(event)">
-  <input id="id" placeholder="Flight ID" required>
+<form id="flightForm">
+  <input id="flightId" placeholder="Flight ID" required>
   <input id="aircraft" placeholder="Aircraft" required>
   <input id="route" placeholder="Route" required>
   <select id="status">
-    <option>scheduled</option>
+    <option>Scheduled</option>
     <option>Boarding</option>
     <option>Enroute</option>
     <option>Landed</option>
   </select>
-  <button>Add</button>
+  <input type="time" id="scheduledTime" required>
+  <button type="submit">Add Flight</button>
 </form>
 
 <h2>Active Flights</h2>
@@ -30,59 +33,99 @@
     <th>Aircraft</th>
     <th>Route</th>
     <th>Status</th>
-    <th>Remove</th>
+    <th>Scheduled</th>
+    <th>Countdown</th>
+    <th>Delete</th>
   </tr>
 </table>
 
+<script src="admin.js"></script>
 <script>
 checkAdmin();
 
 let flights = JSON.parse(localStorage.getItem("flights")) || [];
 
-function save() {
-  localStorage.setItem("flights", JSON.stringify(flights));
-  render();
-}
+const form = document.getElementById("flightForm");
+const table = document.getElementById("flightTable");
 
-function addFlight(e) {
+form.addEventListener("submit", function(e) {
   e.preventDefault();
-  flights.push({
-    id: id.value,
-    aircraft: aircraft.value,
-    route: route.value,
-    status: status.value
-  });
-  save();
+
+  const flight = {
+    id: document.getElementById("flightId").value,
+    aircraft: document.getElementById("aircraft").value,
+    route: document.getElementById("route").value,
+    status: document.getElementById("status").value,
+    scheduledTime: document.getElementById("scheduledTime").value
+  };
+
+  flights.push(flight);
+  saveFlights();
+  form.reset();
+});
+
+function saveFlights() {
+  localStorage.setItem("flights", JSON.stringify(flights));
+  renderFlights();
 }
 
-function removeFlight(i) {
-  flights.splice(i, 1);
-  save();
+function removeFlight(index) {
+  flights.splice(index, 1);
+  saveFlights();
 }
 
-function render() {
-  const table = document.getElementById("flightTable");
+function getCountdown(timeStr) {
+  if (!timeStr) return "-";
+  const now = new Date();
+  const [hours, minutes] = timeStr.split(":");
+  const flightTime = new Date();
+  flightTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+
+  let diff = flightTime - now;
+  if (diff < 0) return "Departed";
+
+  const h = Math.floor(diff / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  return `${h}h ${m}m ${s}s`;
+}
+
+function renderFlights() {
   table.innerHTML = `
     <tr>
-      <th>ID</th><th>Aircraft</th><th>Route</th><th>Status</th><th>Remove</th>
+      <th>ID</th>
+      <th>Aircraft</th>
+      <th>Route</th>
+      <th>Status</th>
+      <th>Scheduled</th>
+      <th>Countdown</th>
+      <th>Delete</th>
     </tr>
   `;
+
   flights.forEach((f, i) => {
+    let statusColor = "#fff"; 
+    if(f.status === "Scheduled") statusColor = "#ffb81c";
+    else if(f.status === "Boarding") statusColor = "#00b4ff";
+    else if(f.status === "Enroute") statusColor = "#1da1f2";
+    else if(f.status === "Landed") statusColor = "#aaa";
+
     table.innerHTML += `
       <tr>
         <td>${f.id}</td>
         <td>${f.aircraft}</td>
         <td>${f.route}</td>
-        <td>${f.status}</td>
-        <td><button onclick="removeFlight(${i})">X</button></td>
+        <td style="color:${statusColor}; font-weight:bold;">${f.status}</td>
+        <td>${f.scheduledTime || "-"}</td>
+        <td>${getCountdown(f.scheduledTime)}</td>
+        <td><button onclick="removeFlight(${i})">Delete</button></td>
       </tr>
     `;
   });
 }
 
-render();
+setInterval(renderFlights, 1000);
+renderFlights();
 </script>
-
-<script src="admin.js"></script>
 </body>
 </html>
