@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard | SWA PTFS</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body onload="checkAdmin()">
+
+<h1>Flight Control Panel</h1>
+<button onclick="logout()">Logout</button>
+
+<h2>Add Flight</h2>
+<form onsubmit="addFlight(event)">
+  <input id="id" placeholder="Flight ID" required>
+  <input id="aircraft" placeholder="Aircraft" required>
+  <input id="route" placeholder="Route" required>
+  <select id="status">
+    <option>Boarding</option>
+    <option>Enroute</option>
+    <option>Landed</option>
+  </select>
+  <button>Add</button>
+</form>
+
+<h2>Active Flights</h2>
+<table id="flightTable">
+  <tr>
+    <th>ID</th>
+    <th>Aircraft</th>
+    <th>Route</th>
+    <th>Status</th>
+    <th>Remove</th>
+  </tr>
+</table>
+
+<script>
+checkAdmin();
+
+let flights = JSON.parse(localStorage.getItem("flights")) || [];
+
+function save() {
+  localStorage.setItem("flights", JSON.stringify(flights));
+  render();
+}
+
+function addFlight(e) {
+  e.preventDefault();
+  flights.push({
+    id: id.value,
+    aircraft: aircraft.value,
+    route: route.value,
+    status: status.value
+  });
+  save();
+}
+
+function removeFlight(i) {
+  flights.splice(i, 1);
+  save();
+}
+
+function render() {
+  const table = document.getElementById("flightTable");
+  table.innerHTML = `
+    <tr>
+      <th>ID</th><th>Aircraft</th><th>Route</th><th>Status</th><th>Remove</th>
+    </tr>
+  `;
+  flights.forEach((f, i) => {
+    table.innerHTML += `
+      <tr>
+        <td>${f.id}</td>
+        <td>${f.aircraft}</td>
+        <td>${f.route}</td>
+        <td>${f.status}</td>
+        <td><button onclick="removeFlight(${i})">X</button></td>
+      </tr>
+    `;
+  });
+}
+
+render();
+</script>
+
+<script src="admin.js"></script>
+</body>
+</html>
