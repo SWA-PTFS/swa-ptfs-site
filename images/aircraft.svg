@@ -1,35 +1,37 @@
-<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="blueGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#003a8f"/>
-      <stop offset="100%" stop-color="#002554"/>
-    </linearGradient>
-  </defs>
+<svg width="900" height="240" viewBox="0 0 900 240" xmlns="http://www.w3.org/2000/svg">
 
-  <circle cx="160" cy="160" r="150" fill="url(#blueGrad)"/>
+  <!-- Fuselage -->
+  <path d="M80 120
+           C120 95, 200 85, 360 85
+           L720 85
+           C780 85, 820 105, 840 120
+           C820 135, 780 155, 720 155
+           L360 155
+           C200 155, 120 145, 80 120Z"
+        fill="#003a8f"/>
 
-  <!-- Heart -->
-  <path d="M160 200
-           C120 160, 80 130, 110 100
-           C135 75, 160 95, 160 115
-           C160 95, 185 75, 210 100
-           C240 130, 200 160, 160 200Z"
-        fill="#d71920"/>
+  <!-- Nose -->
+  <ellipse cx="80" cy="120" rx="40" ry="35" fill="#003a8f"/>
 
-  <!-- Gold underline -->
-  <rect x="95" y="215" width="130" height="8" fill="#ffb81c"/>
+  <!-- Cockpit -->
+  <path d="M95 105 L140 100 L150 115 L100 118Z" fill="#1c1c1c"/>
 
-  <text x="160" y="80" text-anchor="middle"
+  <!-- Wings -->
+  <path d="M400 155 L540 200 L510 205 L360 165Z" fill="#002554"/>
+
+  <!-- Engines -->
+  <ellipse cx="480" cy="165" rx="26" ry="18" fill="#d71920"/>
+  <ellipse cx="560" cy="170" rx="26" ry="18" fill="#d71920"/>
+
+  <!-- Tail -->
+  <path d="M720 85 L780 45 L790 45 L770 85Z" fill="#d71920"/>
+  <rect x="735" y="85" width="40" height="70" fill="#ffb81c"/>
+
+  <!-- Title -->
+  <text x="450" y="140" text-anchor="middle"
         font-family="Arial Black"
-        font-size="42"
+        font-size="22"
         fill="white">
-    SWA
-  </text>
-
-  <text x="160" y="255" text-anchor="middle"
-        font-family="Arial"
-        font-size="18"
-        fill="#e6e6e6">
-    PTFS
+    SOUTHWEST
   </text>
 </svg>
