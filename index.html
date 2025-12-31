@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SWA PTFS</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <img src="images/logo.svg" class="logo" />
+  <a href="index.html">Home</a>
+  <a href="admin/admin.html">Admin</a>
+</nav>
+
+<section class="hero">
+  <img src="images/hero.svg" />
+  <h1>Southwest PTFS</h1>
+  <p>Live Flight Operations</p>
+</section>
+
+<section>
+  <h2>Live Flights</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Flight</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="flights"></tbody>
+  </table>
+</section>
+
+<script src="js/api.js"></script>
+<script src="js/flights.js"></script>
+</body>
+</html>
