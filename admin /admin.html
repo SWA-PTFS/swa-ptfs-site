@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>SWA Admin</title>
+  <meta charset="UTF-8" />
+  <title>SWA PTFS Admin</title>
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -17,12 +18,15 @@
     <tr>
       <th>Flight</th>
       <th>Status</th>
-      <th>Update</th>
+      <th>Action</th>
     </tr>
   </thead>
-  <tbody id="adminFlights"></tbody>
+  <tbody id="adminFlights">
+    <!-- JS inserts rows here -->
+  </tbody>
 </table>
 
+<!-- IMPORTANT: api.js MUST LOAD FIRST -->
 <script src="../js/api.js"></script>
 <script src="../js/admin.js"></script>
 </body>
