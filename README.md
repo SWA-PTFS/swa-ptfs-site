@@ -24,7 +24,7 @@ https://swa-ptfs.github.io/swa-ptfs-site/
 
 ⚠️ **Note:**  
 This is a frontend-only admin system designed for PTFS and GitHub Pages.  
-For full security, a backend (Firebase, Supabase, or Discord OAuth) is recommended.
+For full security, a backend backend added Discord OAuth coming soon.
 
 ---
 
