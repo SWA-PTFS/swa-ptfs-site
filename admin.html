@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SWA PTFS Admin</title>
+<style>
+  body { font-family: sans-serif; padding: 2rem; background: #f2f2f2; }
+  h1 { color: #333; }
+  input, select, button { margin: 0.5rem 0; padding: 0.5rem; width: 100%; }
+  .panel { background: #fff; padding: 1rem; margin-bottom: 2rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
+</style>
+</head>
+<body>
+
+<h1>Admin Panel</h1>
+
+<div class="panel" id="loginPanel">
+  <h2>Admin Login</h2>
+  <input type="text" id="username" placeholder="Username">
+  <input type="password" id="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+</div>
+
+<div class="panel" id="flightsPanel" style="display:none;">
+  <h2>Update Flight Status</h2>
+  <select id="flightSelect"></select>
+  <select id="statusSelect">
+    <option value="scheduled">Scheduled</option>
+    <option value="boarding">Boarding</option>
+    <option value="departed">Departed</option>
+    <option value="arrived">Arrived</option>
+    <option value="cancelled">Cancelled</option>
+  </select>
+  <button onclick="updateFlight()">Update Flight</button>
+
+  <hr>
+
+  <h2>Create New Flight</h2>
+  <input type="text" id="newFlightNumber" placeholder="Flight Number">
+  <input type="text" id="newOrigin" placeholder="Origin">
+  <input type="text" id="newDestination" placeholder="Destination">
+  <input type="datetime-local" id="newTime">
+  <select id="newStatus">
+    <option value="scheduled">Scheduled</option>
+    <option value="boarding">Boarding</option>
+    <option value="departed">Departed</option>
+    <option value="arrived">Arrived</option>
+    <option value="cancelled">Cancelled</option>
+  </select>
+  <button onclick="createFlight()">Create Flight</button>
+</div>
+
+<script>
+const backendUrl = "https://swaptfs.sfleishman.workers.dev";
+
+async function login() {
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+
+  const res = await fetch(`${backendUrl}/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, password })
+  });
+
+  if (res.ok) {
+    const data = await res.json();
+    localStorage.setItem("adminToken", data.token);
+    document.getElementById("loginPanel").style.display = "none";
+    document.getElementById("flightsPanel").style.display = "block";
+    loadFlights();
+  } else {
+    alert("Login failed");
+  }
+}
+
+async function loadFlights() {
+  const token = localStorage.getItem("adminToken");
+  const res = await fetch(`${backendUrl}/flights`, {
+    headers: { "Authorization": "Bearer " + token }
+  });
+  const flights = await res.json();
+  const select = document.getElementById("flightSelect");
+  select.innerHTML = "";
+  flights.forEach(f => {
+    const option = document.createElement("option");
+    option.value = f.id;
+    option.textContent = `${f.flightNumber} (${f.origin} → ${f.destination})`;
+    select.appendChild(option);
+  });
+}
+
+async function updateFlight() {
+  const token = localStorage.getItem("adminToken");
+  const flightId = document.getElementById("flightSelect").value;
+  const status = document.getElementById("statusSelect").value;
+
+  const res = await fetch(`${backendUrl}/flights/${flightId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + token
+    },
+    body: JSON.stringify({ status })
+  });
+
+  if (res.ok) {
+    alert("Flight updated!");
+    loadFlights();
+  } else {
+    alert("Failed to update flight");
+  }
+}
+
+async function createFlight() {
+  const token = localStorage.getItem("adminToken");
+  const flight = {
+    flightNumber: document.getElementById("newFlightNumber").value,
+    origin: document.getElementById("newOrigin").value,
+    destination: document.getElementById("newDestination").value,
+    time: document.getElementById("newTime").value,
+    status: document.getElementById("newStatus").value
+  };
+
+  const res = await fetch(`${backendUrl}/flights`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + token
+    },
+    body: JSON.stringify(flight)
+  });
+
+  if (res.ok) {
+    alert("Flight created!");
+    loadFlights();
+  } else {
+    alert("Failed to create flight");
+  }
+}
+</script>
+
+</body>
+</html>
