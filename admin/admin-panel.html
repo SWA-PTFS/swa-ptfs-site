@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel</title>
+</head>
+<body>
+<h2>Flight Editor</h2>
+
+<input id="flightId" placeholder="Flight ID">
+<select id="status">
+  <option>Scheduled</option>
+  <option>Boarding</option>
+  <option>Departed</option>
+  <option>Delayed</option>
+  <option>Cancelled</option>
+</select>
+<button onclick="update()">Update Flight</button>
+
+<script>
+const token = localStorage.getItem("adminToken");
+if (!token) location.href = "admin.html";
+
+async function update() {
+  await fetch("https://swaptfs.sfleishman.workers.dev/flights", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + token
+    },
+    body: JSON.stringify({
+      id: flightId.value,
+      status: status.value
+    })
+  });
+
+  alert("Flight updated");
+}
+</script>
+</body>
+</html>
