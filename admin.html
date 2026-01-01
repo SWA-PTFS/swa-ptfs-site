@@ -1,7 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta http-equiv="refresh" content="0; url=admin/admin.html">
+  <meta charset="UTF-8" />
+  <title>SWA PTFS Admin</title>
+  <link rel="stylesheet" href="../css/style.css">
 </head>
-<body></body>
+<body>
+
+<nav class="navbar">
+  <a href="../index.html">← Back to Home</a>
+</nav>
+
+<h1>Admin Dashboard</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Flight</th>
+      <th>Status</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody id="adminFlights">
+    <!-- JS inserts rows here -->
+  </tbody>
+</table>
+
+<!-- IMPORTANT: api.js MUST LOAD FIRST -->
+<script src="../js/api.js"></script>
+<script src="../js/admin.js"></script>
+</body>
 </html>
