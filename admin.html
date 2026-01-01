@@ -3,141 +3,155 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SWA PTFS Admin</title>
+<title>SWA PTFS Admin Panel</title>
 <style>
-  body { font-family: sans-serif; padding: 2rem; background: #f2f2f2; }
-  h1 { color: #333; }
-  input, select, button { margin: 0.5rem 0; padding: 0.5rem; width: 100%; }
-  .panel { background: #fff; padding: 1rem; margin-bottom: 2rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
+  body { font-family: Arial, sans-serif; padding: 20px; }
+  h2 { margin-top: 30px; }
+  input, select, button { margin: 5px; padding: 5px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+  th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+  th { background-color: #f4f4f4; }
+  .hidden { display: none; }
 </style>
 </head>
 <body>
 
 <h1>Admin Panel</h1>
 
-<div class="panel" id="loginPanel">
-  <h2>Admin Login</h2>
+<!-- LOGIN -->
+<div id="loginDiv">
+  <h2>Login</h2>
   <input type="text" id="username" placeholder="Username">
   <input type="password" id="password" placeholder="Password">
   <button onclick="login()">Login</button>
+  <p id="loginMsg" style="color:red;"></p>
 </div>
 
-<div class="panel" id="flightsPanel" style="display:none;">
-  <h2>Update Flight Status</h2>
-  <select id="flightSelect"></select>
-  <select id="statusSelect">
-    <option value="scheduled">Scheduled</option>
-    <option value="boarding">Boarding</option>
-    <option value="departed">Departed</option>
-    <option value="arrived">Arrived</option>
-    <option value="cancelled">Cancelled</option>
-  </select>
-  <button onclick="updateFlight()">Update Flight</button>
-
-  <hr>
-
-  <h2>Create New Flight</h2>
-  <input type="text" id="newFlightNumber" placeholder="Flight Number">
-  <input type="text" id="newOrigin" placeholder="Origin">
-  <input type="text" id="newDestination" placeholder="Destination">
-  <input type="datetime-local" id="newTime">
-  <select id="newStatus">
-    <option value="scheduled">Scheduled</option>
-    <option value="boarding">Boarding</option>
-    <option value="departed">Departed</option>
-    <option value="arrived">Arrived</option>
-    <option value="cancelled">Cancelled</option>
+<!-- ADMIN PANEL -->
+<div id="adminDiv" class="hidden">
+  <h2>Create Flight</h2>
+  <input type="text" id="flightNumber" placeholder="Flight Number">
+  <input type="text" id="origin" placeholder="Origin">
+  <input type="text" id="destination" placeholder="Destination">
+  <input type="datetime-local" id="time">
+  <select id="status">
+    <option value="Scheduled">Scheduled</option>
+    <option value="Delayed">Delayed</option>
+    <option value="Cancelled">Cancelled</option>
+    <option value="Completed">Completed</option>
   </select>
   <button onclick="createFlight()">Create Flight</button>
+
+  <h2>Flight List</h2>
+  <table id="flightsTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Flight Number</th>
+        <th>Origin</th>
+        <th>Destination</th>
+        <th>Time</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 </div>
 
 <script>
-const backendUrl = "https://swaptfs.sfleishman.workers.dev";
+let token = '';
 
 async function login() {
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
 
-  const res = await fetch(`${backendUrl}/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password })
-  });
+  try {
+    const res = await fetch('https://swaptfs.sfleishman.workers.dev/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
 
-  if (res.ok) {
+    if (!res.ok) throw new Error('Login failed');
+
     const data = await res.json();
-    localStorage.setItem("adminToken", data.token);
-    document.getElementById("loginPanel").style.display = "none";
-    document.getElementById("flightsPanel").style.display = "block";
-    loadFlights();
-  } else {
-    alert("Login failed");
+    token = data.token;
+
+    document.getElementById('loginDiv').classList.add('hidden');
+    document.getElementById('adminDiv').classList.remove('hidden');
+
+    fetchFlights();
+  } catch (err) {
+    document.getElementById('loginMsg').innerText = 'Invalid credentials';
   }
 }
 
-async function loadFlights() {
-  const token = localStorage.getItem("adminToken");
-  const res = await fetch(`${backendUrl}/flights`, {
-    headers: { "Authorization": "Bearer " + token }
+async function fetchFlights() {
+  const res = await fetch('https://swaptfs.sfleishman.workers.dev/flights', {
+    headers: { 'Authorization': `Bearer ${token}` }
   });
   const flights = await res.json();
-  const select = document.getElementById("flightSelect");
-  select.innerHTML = "";
+  const tbody = document.querySelector('#flightsTable tbody');
+  tbody.innerHTML = '';
+
   flights.forEach(f => {
-    const option = document.createElement("option");
-    option.value = f.id;
-    option.textContent = `${f.flightNumber} (${f.origin} → ${f.destination})`;
-    select.appendChild(option);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${f.id}</td>
+      <td>${f.flightNumber}</td>
+      <td>${f.origin}</td>
+      <td>${f.destination}</td>
+      <td>${new Date(f.time).toLocaleString()}</td>
+      <td>
+        <select data-id="${f.id}">
+          <option ${f.status==='Scheduled'?'selected':''}>Scheduled</option>
+          <option ${f.status==='Delayed'?'selected':''}>Delayed</option>
+          <option ${f.status==='Cancelled'?'selected':''}>Cancelled</option>
+          <option ${f.status==='Completed'?'selected':''}>Completed</option>
+        </select>
+      </td>
+      <td><button onclick="updateFlight(${f.id})">Update</button></td>
+    `;
+    tbody.appendChild(tr);
   });
-}
-
-async function updateFlight() {
-  const token = localStorage.getItem("adminToken");
-  const flightId = document.getElementById("flightSelect").value;
-  const status = document.getElementById("statusSelect").value;
-
-  const res = await fetch(`${backendUrl}/flights/${flightId}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + token
-    },
-    body: JSON.stringify({ status })
-  });
-
-  if (res.ok) {
-    alert("Flight updated!");
-    loadFlights();
-  } else {
-    alert("Failed to update flight");
-  }
 }
 
 async function createFlight() {
-  const token = localStorage.getItem("adminToken");
   const flight = {
-    flightNumber: document.getElementById("newFlightNumber").value,
-    origin: document.getElementById("newOrigin").value,
-    destination: document.getElementById("newDestination").value,
-    time: document.getElementById("newTime").value,
-    status: document.getElementById("newStatus").value
+    flightNumber: document.getElementById('flightNumber').value,
+    origin: document.getElementById('origin').value,
+    destination: document.getElementById('destination').value,
+    time: document.getElementById('time').value,
+    status: document.getElementById('status').value
   };
 
-  const res = await fetch(`${backendUrl}/flights`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + token
+  await fetch('https://swaptfs.sfleishman.workers.dev/flights', {
+    method: 'POST',
+    headers: { 
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
     },
     body: JSON.stringify(flight)
   });
 
-  if (res.ok) {
-    alert("Flight created!");
-    loadFlights();
-  } else {
-    alert("Failed to create flight");
-  }
+  fetchFlights();
+}
+
+async function updateFlight(id) {
+  const select = document.querySelector(`select[data-id="${id}"]`);
+  const status = select.value;
+
+  await fetch(`https://swaptfs.sfleishman.workers.dev/flights/${id}`, {
+    method: 'PUT',
+    headers: { 
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({ status })
+  });
+
+  fetchFlights();
 }
 </script>
 
